@@ -1,0 +1,31 @@
+[submodule "doc"]
+	path = doc
+	url = git@github.com:bdmihai/pico-doc
+[submodule "qbs/modules/rp"]
+	path = qbs/modules/rp
+	url = git@github.com:bdmihai/pico-qbs
+[submodule "tools"]
+	path = tools
+	url = git@github.com:bdmihai/pico-tools
+[submodule "source/boot"]
+	path = source/boot
+	url = git@github.com:bdmihai/pico-boot
+[submodule "source/rp2040"]
+	path = source/rp2040
+	url = git@github.com:bdmihai/pico-rp2040
+[submodule "source/sdk"]
+	path = source/sdk
+	url = git@github.com:bdmihai/pico-sdk
+[submodule "source/tinyusb"]
+	path = source/tinyusb
+	url = git@github.com:bdmihai/pico-tinyusb
+[submodule "source/cmsis"]
+	path = source/cmsis
+	url = git@github.com:bdmihai/pico-cmsis
+[submodule "source/freertos"]
+	path = source/freertos
+	url = git@github.com:bdmihai/pico-freertos
+	branch = smp
+[submodule "source/mbedtls"]
+	path = source/mbedtls
+	url = git@github.com:bdmihai/pico-mbedtls

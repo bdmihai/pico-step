@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/usr/lib/gcc/arm-none-eabi/13.1.0/include/**",
+                "/usr/lib/gcc/arm-none-eabi/13.1.0/include-fixed/**",
+                "/usr/lib/gcc/arm-none-eabi/13.1.0/../../../../arm-none-eabi/include/**",
+                "${workspaceFolder}/source/rp2040/**",
+                "${workspaceFolder}/source/sdk/**",
+                "${workspaceFolder}/source/freertos/inc",
+                "${workspaceFolder}/source/cmsis/include",
+                "${workspaceFolder}/source/freertos/port",
+                "${workspaceFolder}/source/cmsis/rp",
+                "${workspaceFolder}/source/tinyusb"
+            ],
+            "forcedInclude": [],
+            "compilerPath": "/usr/bin/arm-none-eabi-g++",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "defines": [],
+            "configurationProvider": "qbs-community.qbs-tools"
+        }
+    ],
+    "version": 4
+}

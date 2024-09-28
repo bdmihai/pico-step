@@ -1,0 +1,87 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "cwd": "${workspaceRoot}",
+            "executable": "${workspaceFolder}/bin/application.elf",
+            "name": "OpenOCD Core0",
+            "request": "launch",
+            "device": "rp2040",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "serverpath": "${workspaceFolder}/tools/openocd/bin/openocd",
+            "svdFile": "${workspaceFolder}/doc/svd/rp2040.svd",
+            "breakAfterReset": false,
+            "overrideLaunchCommands": [
+                "monitor reset halt",
+                "tb platform_entry"
+            ],
+            "postRestartCommands": [
+                "tb platform_entry"
+            ],
+            "searchDir": [
+                "${workspaceFolder}/tools/openocd/tcl"
+            ],
+            "configFiles": [
+                "interface/wch-link.cfg",
+                "target/rp2040-core0.cfg"
+            ]
+        },
+        {
+            "cwd": "${workspaceRoot}",
+            "executable": "${workspaceFolder}/bin/application.elf",
+            "name": "OpenOCD Core0 + RTOS",
+            "request": "launch",
+            "device": "rp2040",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "serverpath": "${workspaceFolder}/tools/openocd/bin/openocd",
+            "svdFile": "${workspaceFolder}/doc/svd/rp2040.svd",
+            "breakAfterReset": false,
+            "rtos": "FreeRTOS",
+            "overrideLaunchCommands": [
+                "monitor reset halt",
+                "tb platform_entry"
+            ],
+            "postRestartCommands": [
+                "tb platform_entry"
+            ],
+            "searchDir": [
+                "${workspaceFolder}/tools/openocd/tcl"
+            ],
+            "configFiles": [
+                "interface/wch-link.cfg",
+                "target/rp2040-core0.cfg"
+            ]
+        },
+        {
+            "cwd": "${workspaceRoot}",
+            "executable": "${workspaceFolder}/bin/application.elf",
+            "name": "OpenOCD Core0+Core1",
+            "request": "launch",
+            "device": "rp2040",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "serverpath": "${workspaceFolder}/tools/openocd/bin/openocd",
+            "svdFile": "${workspaceFolder}/doc/svd/rp2040.svd",
+            "breakAfterReset": false,
+            "overrideLaunchCommands": [
+                "monitor reset halt",
+                "tb platform_entry"
+            ],
+            "postRestartCommands": [
+                "tb platform_entry"
+            ],
+            "searchDir": [
+                "${workspaceFolder}/tools/openocd/tcl"
+            ],
+            "configFiles": [
+                "interface/wch-link.cfg",
+                "target/rp2040.cfg"
+            ]
+        }
+    ]
+}
