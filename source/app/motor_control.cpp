@@ -21,68 +21,75 @@
  | THE USE OR OTHER DEALINGS IN THE SOFTWARE.                                 |
  |____________________________________________________________________________|
  |                                                                            |
- |  Author: Mihai Baneu                           Last modified: 15.May.2020  |
+ |  Author: Mihai Baneu                           Last modified: 03.Oct.2024  |
  |                                                                            |
  |___________________________________________________________________________*/
 
-Product {
-    name: 'application'
-    type: 'app'
+#include <stdint.h>
+#include "hardware/gpio.h"
+#include "hardware/irq.h"
+#include "hardware/timer.h"
+#include "pico/time.h"
+#include "motor_control.h"
 
-    Depends { name: 'rp' }
-    Depends { name: 'boot' }
-    Depends { name: 'rp2040' }
-    Depends { name: 'freertos' }
+static uint32_t mototr_en_pin;
+static uint32_t mototr_dir_pin;
+static uint32_t mototr_step_pin;
 
-    Depends { name: 'pico_runtime' }
-    Depends { name: 'pico_sync' }
-    Depends { name: 'pico_util' }
-    Depends { name: 'pico_time' }
-    Depends { name: 'pico_bootrom' }
-    Depends { name: 'pico_malloc' }
-    Depends { name: 'pico_mem_ops' }
-    Depends { name: 'pico_printf' }
-    Depends { name: 'pico_bit_ops' }
-    Depends { name: 'pico_int64_ops' }
-    Depends { name: 'pico_divider' }
-    Depends { name: 'pico_float' }
-    Depends { name: 'pico_double' }
-    Depends { name: 'pico_unique_id' }
-    Depends { name: 'pico_binary_info' }
-    Depends { name: 'pico_bootsel_via_double_reset' }
-    Depends { name: 'pico_stdlib' }
-    Depends { name: 'pico_stdio' }
-    Depends { name: 'pico_stdio_semihosting' }
-    Depends { name: 'pico_stdio_uart' }
-    Depends { name: 'pico_multicore' }
-    Depends { name: 'hardware_gpio' }
-    Depends { name: 'hardware_sync' }
-    Depends { name: 'hardware_irq' }
-    Depends { name: 'hardware_claim' }
-    Depends { name: 'hardware_timer' }
-    Depends { name: 'hardware_clocks' }
-    Depends { name: 'hardware_watchdog' }
-    Depends { name: 'hardware_xosc' }
-    Depends { name: 'hardware_pll' }
-    Depends { name: 'hardware_divider' } 
-    Depends { name: 'hardware_flash' } 
-    Depends { name: 'hardware_uart' }
-    Depends { name: 'hardware_dma' }
-    Depends { name: 'hardware_resets' }
-    Depends { name: 'hardware_interp'}
-    Depends { name: 'hardware_rtc' }
-    Depends { name: 'hardware_adc' }
-    Depends { name: 'hardware_vreg' }
+static uint64_t step_delay_us;
 
+static int64_t alarm_callback(alarm_id_t id, void *user_data)
+{
+    (void)id;
+    
+    gpio_xor_mask(1u << mototr_step_pin);
+    return *(uint64_t*)user_data;
+} 
 
-    files: [
-        '*.h',
-        '*.c',
-        '*.cpp'
-    ]
+void motor_init(uint32_t en_pin, uint32_t dir_pin, uint32_t step_pin)
+{
+    mototr_en_pin = en_pin;
+    mototr_dir_pin = dir_pin;
+    mototr_step_pin = step_pin;
 
-    Group {
-        qbs.install: true
-        fileTagsFilter: ['app', 'map', 'bin', 'uf2']
+    gpio_init(mototr_en_pin);
+    gpio_init(mototr_dir_pin);
+    gpio_init(mototr_step_pin);
+
+    gpio_set_dir(mototr_en_pin, GPIO_OUT);
+    gpio_set_dir(mototr_dir_pin, GPIO_OUT);
+    gpio_set_dir(mototr_step_pin, GPIO_OUT);
+
+    gpio_put(mototr_en_pin, 1);
+    gpio_put(mototr_dir_pin, 0);
+    gpio_put(mototr_step_pin, 0);
+
+    step_delay_us = 1000000 / 200; // one rotation / sec
+    add_alarm_in_us(step_delay_us, alarm_callback, &step_delay_us, false);
+}
+
+void motor_set_speed(uint32_t rot_per_sec)
+{
+    if (rot_per_sec < 128 * 4) {
+        rot_per_sec = 128 * 4;
     }
+    if (rot_per_sec > 4096 * 4) {
+        rot_per_sec = 4096 * 4;
+    }
+    step_delay_us = rot_per_sec;
+}
+
+void motor_set_dir(motor_dir_e dir)
+{
+    gpio_put(mototr_dir_pin, dir == motor_dir_cw ? 1 : 0);
+}
+
+void motor_start()
+{
+    gpio_put(mototr_en_pin, 0);
+}
+
+void motor_stop()
+{
+    gpio_put(mototr_en_pin, 1);
 }

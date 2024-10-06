@@ -21,68 +21,20 @@
  | THE USE OR OTHER DEALINGS IN THE SOFTWARE.                                 |
  |____________________________________________________________________________|
  |                                                                            |
- |  Author: Mihai Baneu                           Last modified: 15.May.2020  |
+ |  Author: Mihai Baneu                           Last modified: 03.Oct.2024  |
  |                                                                            |
  |___________________________________________________________________________*/
 
-Product {
-    name: 'application'
-    type: 'app'
+#pragma once
 
-    Depends { name: 'rp' }
-    Depends { name: 'boot' }
-    Depends { name: 'rp2040' }
-    Depends { name: 'freertos' }
+typedef enum {
+    motor_dir_cw,
+    motor_dir_ccw
+} motor_dir_e;
 
-    Depends { name: 'pico_runtime' }
-    Depends { name: 'pico_sync' }
-    Depends { name: 'pico_util' }
-    Depends { name: 'pico_time' }
-    Depends { name: 'pico_bootrom' }
-    Depends { name: 'pico_malloc' }
-    Depends { name: 'pico_mem_ops' }
-    Depends { name: 'pico_printf' }
-    Depends { name: 'pico_bit_ops' }
-    Depends { name: 'pico_int64_ops' }
-    Depends { name: 'pico_divider' }
-    Depends { name: 'pico_float' }
-    Depends { name: 'pico_double' }
-    Depends { name: 'pico_unique_id' }
-    Depends { name: 'pico_binary_info' }
-    Depends { name: 'pico_bootsel_via_double_reset' }
-    Depends { name: 'pico_stdlib' }
-    Depends { name: 'pico_stdio' }
-    Depends { name: 'pico_stdio_semihosting' }
-    Depends { name: 'pico_stdio_uart' }
-    Depends { name: 'pico_multicore' }
-    Depends { name: 'hardware_gpio' }
-    Depends { name: 'hardware_sync' }
-    Depends { name: 'hardware_irq' }
-    Depends { name: 'hardware_claim' }
-    Depends { name: 'hardware_timer' }
-    Depends { name: 'hardware_clocks' }
-    Depends { name: 'hardware_watchdog' }
-    Depends { name: 'hardware_xosc' }
-    Depends { name: 'hardware_pll' }
-    Depends { name: 'hardware_divider' } 
-    Depends { name: 'hardware_flash' } 
-    Depends { name: 'hardware_uart' }
-    Depends { name: 'hardware_dma' }
-    Depends { name: 'hardware_resets' }
-    Depends { name: 'hardware_interp'}
-    Depends { name: 'hardware_rtc' }
-    Depends { name: 'hardware_adc' }
-    Depends { name: 'hardware_vreg' }
+void motor_init(uint32_t en_pin, uint32_t dir_pin, uint32_t step_pin);
 
-
-    files: [
-        '*.h',
-        '*.c',
-        '*.cpp'
-    ]
-
-    Group {
-        qbs.install: true
-        fileTagsFilter: ['app', 'map', 'bin', 'uf2']
-    }
-}
+void motor_set_speed(uint32_t rot_per_sec);
+void motor_set_dir(motor_dir_e dir);
+void motor_start();
+void motor_stop();

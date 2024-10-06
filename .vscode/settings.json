@@ -36,7 +36,8 @@
         "stdio_usb.h": "c",
         "tusb.h": "c",
         "tusb_common.h": "c",
-        "usbd.h": "c"
+        "usbd.h": "c",
+        "type_traits": "cpp"
     },
     "Open files list": false,
     "Toggle terminal": false,
